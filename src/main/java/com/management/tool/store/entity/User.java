@@ -17,24 +17,17 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "product")
-public class Product {
+@Table(name = "user")
+public class User {
 
     @Id
-    @SequenceGenerator(name = "product_seq", sequenceName = "product_seq", allocationSize = 1)
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "product_seq")
+    @SequenceGenerator(name = "user_seq", sequenceName = "user_seq", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "user_seq")
     private Long id;
 
-    @Column(name = "product_name")
-    private String productName;
+    @Column(name = "username")
+    private String username;
 
-    @Column(name = "price")
-    private Double price;
-
-    @Column(name = "quantity")
-    private Long quantity;
-
-    @Column(name = "description")
-    private String description;
-
+    @Column(name = "password")
+    private String password;
 }
