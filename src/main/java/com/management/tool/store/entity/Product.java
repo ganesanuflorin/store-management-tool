@@ -37,4 +37,7 @@ public class Product {
     @Column(name = "description")
     private String description;
 
+    @Column(name = "code")
+    private Long code;
+
 }
