@@ -1,6 +1,7 @@
 package com.management.tool.store.controller;
 
-import com.management.tool.store.entity.Product;
+import com.management.tool.store.dto.ResponseDto;
+import com.management.tool.store.dto.ProductDto;
 import com.management.tool.store.exceptions.ProductAddException;
 import com.management.tool.store.service.ProductService;
 import lombok.AllArgsConstructor;
@@ -18,14 +19,14 @@ public class ProductController {
 
     private final ProductService productService;
 
-
     @PostMapping(value = "/add")
-    public ResponseEntity<?> addNewProduct(@RequestBody Product product) {
+    public ResponseEntity<ResponseDto> addNewProduct(@RequestBody ProductDto productDto) {
         try {
-            productService.saveProduct(product);
-            return ResponseEntity.status(HttpStatus.OK).body("Product added successfully");
+            productService.saveProduct(productDto);
+            ResponseDto responseDto = new ResponseDto("Product added successfully");
+            return ResponseEntity.status(HttpStatus.OK).body(responseDto);
         } catch (ProductAddException e) {
-            return ResponseEntity.status(HttpStatus.CONFLICT).body("Error adding product");
+           throw new ProductAddException("Error: product already exist");
         }
     }
 
