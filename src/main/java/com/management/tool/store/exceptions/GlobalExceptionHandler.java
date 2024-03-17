@@ -10,7 +10,7 @@ import org.springframework.web.context.request.WebRequest;
 @ControllerAdvice
 public class GlobalExceptionHandler {
 
-    @ExceptionHandler({ProductAddException.class})
+    @ExceptionHandler({ProductAddException.class, ProductNotFoundException.class})
     public final ResponseEntity<Object> handleConflict(RuntimeException e, WebRequest request) {
         HttpHeaders headers = new HttpHeaders();
 
@@ -18,15 +18,22 @@ public class GlobalExceptionHandler {
             HttpStatus status = HttpStatus.CONFLICT;
             ProductAddException pae = (ProductAddException) e;
             return handleProductAddException(pae, headers, status, request);
-        } else {
+        }else if(e instanceof ProductNotFoundException) {
+            HttpStatus status = HttpStatus.NOT_FOUND;
+            ProductNotFoundException pnfe = (ProductNotFoundException) e;
+            return handleProductNotFoundException(pnfe, headers, status, request);
+        }else {
             HttpStatus status = HttpStatus.INTERNAL_SERVER_ERROR;
             return handleExceptionInternal(e, null, headers, status, request);
         }
     }
 
-
     private ResponseEntity<Object> handleProductAddException(ProductAddException pae, HttpHeaders headers, HttpStatus status, WebRequest request) {
         return new ResponseEntity<>(pae.getMessage(), headers, status);
+    }
+
+    private ResponseEntity<Object> handleProductNotFoundException(ProductNotFoundException pnfe, HttpHeaders headers, HttpStatus status, WebRequest request) {
+        return new ResponseEntity<>(pnfe.getMessage(), headers, status);
     }
 
     private ResponseEntity<Object> handleExceptionInternal(RuntimeException e, Object body, HttpHeaders headers, HttpStatus status, WebRequest request) {

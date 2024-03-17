@@ -9,6 +9,12 @@ Description of APIs:
 
  - add new product:
    - that method add a new product
-   - check if in database is another product with the same code
+   - check in database if there is another product with the same code
    - throw an exception if there is another product with the same code
-    
+   - add tests for 2 case when the product works and when it thrown an exception
+ - add new product:
+   - that method find a product by a code
+   - check in database if there is a product with that code
+   - handle a not found exception
+   - add tests for 2 case when the product works and when it thrown an exception
+     
