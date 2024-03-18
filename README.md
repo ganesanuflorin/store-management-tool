@@ -19,10 +19,19 @@ Description of APIs:
    - handle a not found exception
    - add tests for 2 case when we can to find and when it thrown an exception
    - sample case of api call GET : localhost:8089/api/v1/product/findBy?code=1231241231
-
  - update product:
     - that method update price of the product
     - fot it you only need a newPrice and productCode
     - handle if there is not a product with that code with not found exception
     - add tests for 2 case when we have a product and we can to change that price and when it thrown an exception
     - sample case of api call PUT : localhost:8089/api/v1/product/change/15.1/code/1231241231
+ - remove product:
+    - that method remove a product by code
+    - handle if there is not a product with that code with not found exception
+    - add tests when we have a product and remove it and when we don't have
+    - sample case of api call DELETE : localhost:8089/api/v1/product/remove/product/1231241231
+- find all products:
+   - that method find all products from database
+   - add tests when we have products and when we don't have
+   - sample case of api call GET : localhost:8089/api/v1/product/findAll
+    

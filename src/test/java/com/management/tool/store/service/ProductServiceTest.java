@@ -13,12 +13,15 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -97,5 +100,42 @@ public class ProductServiceTest {
         Double newPrice = 15.0;
 
         productService.changeProductPrice(newPrice, code);
+    }
+    @Test
+    public void testRemoveProduct_WhenProductExists() {
+        Long code = 123L;
+        Product product = new Product();
+        product.setCode(code);
+        when(productRepository.findByCode(code)).thenReturn(Optional.of(product));
+        productService.removeProduct(code);
+        verify(productRepository).delete(product);
+    }
+
+    @Test(expected = ProductNotFoundException.class)
+    public void testRemoveProduct_WhenProductDoesNotExist() {
+        Long code = 123L;
+        productService.removeProduct(code);
+    }
+
+    @Test
+    public void testGetAllProducts_WhenNoProducts() {
+        when(productRepository.findAll()).thenReturn(new ArrayList<>());
+        List<ProductDto> result = productService.getAllProducts();
+        assertEquals(0, result.size());
+    }
+
+    @Test
+    public void testGetAllProducts_WhenProductsExist() {
+        List<Product> productList = new ArrayList<>();
+        productList.add(new Product());
+        productList.add(new Product());
+        when(productRepository.findAll()).thenReturn(productList);
+        List<ProductDto> expectedProductDtoList = new ArrayList<>();
+        expectedProductDtoList.add(new ProductDto());
+        expectedProductDtoList.add(new ProductDto());
+        when(productConverter.toDto(any(Product.class))).thenReturn(new ProductDto());
+        List<ProductDto> result = productService.getAllProducts();
+        assertEquals(productList.size(), result.size());
+        verify(productConverter, times(productList.size())).toDto(any(Product.class));
     }
 }
