@@ -11,7 +11,7 @@ import org.springframework.web.context.request.WebRequest;
 public class GlobalExceptionHandler {
 
     @ExceptionHandler({ProductAddException.class, ProductNotFoundException.class})
-    public final ResponseEntity<Object> handleConflict(RuntimeException e, WebRequest request) {
+    public final ResponseEntity<Object> handler(RuntimeException e, WebRequest request) {
         HttpHeaders headers = new HttpHeaders();
 
         if (e instanceof ProductAddException) {
