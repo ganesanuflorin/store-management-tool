@@ -36,10 +36,24 @@ public class ProductService {
     public ProductDto getProductByCode(Long code) {
         if (productRepository.findByCode(code).isPresent()) {
             ProductDto productDto = productConverter.toDto(productRepository.findByCode(code).get());
-            logger.info("Product with code: " + code + "was found");
+            logger.info("Product with code: " + code + " was found");
             return productDto;
         } else {
-            logger.error("Product with code: " + code + "not found");
+            logger.error("Product with code: " + code + " not found");
+            throw new ProductNotFoundException("Product not found");
+        }
+    }
+
+    public void changeProductPrice(Double price, Long code) {
+        if (productRepository.findByCode(code).isPresent()) {
+            Product product = productRepository.findByCode(code).get();
+            Double oldPrice = product.getPrice();
+            product.setPrice(price);
+            productRepository.save(product);
+            logger.info("The price of the product with code: " + product.getCode() +
+                    " has been changed from" + oldPrice + " to " + price);
+        } else {
+            logger.error("Product with code: " + code + " not found");
             throw new ProductNotFoundException("Product not found");
         }
     }

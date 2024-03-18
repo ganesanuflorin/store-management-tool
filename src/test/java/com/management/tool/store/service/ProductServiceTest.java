@@ -76,4 +76,26 @@ public class ProductServiceTest {
         Long code = 1231L;
         productService.getProductByCode(code);
     }
+
+    @Test
+    public void testChangeProductPrice_WhenProductExists() {
+        Long code = 123L;
+        Double newPrice = 15.0;
+        Product product = new Product();
+        product.setCode(code);
+        product.setPrice(10.0);
+
+        when(productRepository.findByCode(code)).thenReturn(Optional.of(product));
+        productService.changeProductPrice(newPrice, code);
+        product.setPrice(newPrice);
+        verify(productRepository).save(product);
+    }
+
+    @Test(expected = ProductNotFoundException.class)
+    public void testChangeProductPrice_WhenProductDoesNotExist() {
+        Long code = 123L;
+        Double newPrice = 15.0;
+
+        productService.changeProductPrice(newPrice, code);
+    }
 }
